@@ -13,3 +13,17 @@ build-nodejs:
 
 build-wasm:
 	make build-web ; make build-bundler ; make build-nodejs
+
+test-node:
+	make build-nodejs && pushd ./examples/node-test && yarn test ; popd
+
+publish-node:
+	# make sure not to call make build-* because wasm-pack doesnt allow you to specify subdirectories.
+	wasm-pack build --release --target nodejs
+	sed -i'' -e "s/sha256_pow/sha256-pow/" ./pkg/package.json
+	wasm-pack publish ./pkg
+
+publish-bundler:
+	wasm-pack build --release --target bundler
+	sed -i'' -e "s/sha256_pow/sha256-pow-bundler/" ./pkg/package.json
+	wasm-pack publish ./pkg
