@@ -1,7 +1,7 @@
 # sha256-pow
 
 ```js
-import init, { mine, verify } from '../../pkg/web/sha256_pow.js';
+import init, { mine, verify } from 'https://deno.land/x/sha256pow@0.1.0/sha256_pow.js';
 
 await init();
 
