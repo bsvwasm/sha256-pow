@@ -4,9 +4,10 @@
 * Takes a template vector to be hashed and a target difficulty u256 in hex string form and will mine until it finds a hash that matches the desired difficulty
 * @param {Uint8Array} template
 * @param {string} target_hex
+* @param {BigInt | undefined} offset
 * @returns {Promise<ProofOfWork>}
 */
-export function mine(template: Uint8Array, target_hex: string): Promise<ProofOfWork>;
+export function mine(template: Uint8Array, target_hex: string, offset?: BigInt): Promise<ProofOfWork>;
 /**
 * @param {ProofOfWork} pow
 * @param {string} target_hex
@@ -39,6 +40,11 @@ export class ProofOfWork {
 * @returns {string}
 */
   to_json(): string;
+/**
+* @param {string} json_string
+* @returns {ProofOfWork}
+*/
+  static from_json(json_string: string): ProofOfWork;
 }
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -50,18 +56,19 @@ export interface InitOutput {
   readonly proofofwork_get_template: (a: number, b: number) => void;
   readonly proofofwork_get_nonce: (a: number, b: number) => void;
   readonly proofofwork_to_json: (a: number, b: number) => void;
-  readonly mine: (a: number, b: number, c: number, d: number) => number;
+  readonly proofofwork_from_json: (a: number, b: number) => number;
+  readonly mine: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => number;
   readonly verify: (a: number, b: number, c: number) => number;
   readonly __wbindgen_export_0: WebAssembly.Table;
   readonly __wbindgen_export_1: WebAssembly.Table;
-  readonly closure26_externref_shim: (a: number, b: number, c: number) => void;
+  readonly closure45_externref_shim: (a: number, b: number, c: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_free: (a: number, b: number) => void;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
   readonly __wbindgen_exn_store: (a: number) => void;
   readonly __externref_table_alloc: () => number;
-  readonly closure45_externref_shim: (a: number, b: number, c: number, d: number) => void;
+  readonly closure65_externref_shim: (a: number, b: number, c: number, d: number) => void;
   readonly __wbindgen_start: () => void;
 }
 

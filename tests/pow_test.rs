@@ -10,7 +10,7 @@ mod tests {
     let target = "0021e8000000000000000000000000000000000000000000000000000000000".to_string();
     println!("mining to target {}...", &target);
 
-    let output = sha256_pow::mine(b"Hello, PoW!".to_vec(), target.clone()).await.unwrap();
+    let output = sha256_pow::mine(b"Hello, PoW!".to_vec(), target.clone(), None).await.unwrap();
 
 
     println!("finished mining!");
@@ -22,7 +22,7 @@ mod tests {
     let target = "000021e80000000000000000000000000000000000000000000000000000000".to_string();
     println!("mining to target {}...", &target);
 
-    let output = sha256_pow::mine(b"Hello, PoW!".to_vec(), target.clone()).await.unwrap();
+    let output = sha256_pow::mine(b"Hello, PoW!".to_vec(), target.clone(), None).await.unwrap();
 
 
     println!("finished mining!");

@@ -32,6 +32,13 @@ impl ProofOfWork {
       Err(e) => Err(JsValue::from_str(&format!("{:#?}", e)))
     }
   }
+
+  pub fn from_json(json_string: &str) -> Result<ProofOfWork, JsValue> {
+    match serde_json::from_str(json_string) {
+      Ok(v) => Ok(v),
+      Err(e) => Err(JsValue::from_str(&format!("{:#?}", e)))
+    }
+  }
 }
 
 #[wasm_bindgen]
@@ -49,11 +56,16 @@ impl Into<JsValue> for POWErrors {
 
 #[wasm_bindgen]
 /// Takes a template vector to be hashed and a target difficulty u256 in hex string form and will mine until it finds a hash that matches the desired difficulty
-pub async fn mine(template: Vec<u8>, target_hex: String) -> Result<ProofOfWork, JsValue> {
+pub async fn mine(template: Vec<u8>, target_hex: String, offset: Option<u64>) -> Result<ProofOfWork, JsValue> {
   console_error_panic_hook::set_once();
   let target_u256 = U256::from_str_radix(&target_hex, 16).unwrap();
 
-  for nonce in 0..u64::MAX {    
+  let offset = match offset {
+    Some(v) => v,
+    None => 0
+  };
+
+  for nonce in offset..u64::MAX {    
     let mut hasher = sha2::Sha256::new();
     hasher.update(&template);
     hasher.update(&nonce.to_le_bytes());

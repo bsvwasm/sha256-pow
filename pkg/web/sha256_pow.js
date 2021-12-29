@@ -46,7 +46,7 @@ function makeMutClosure(arg0, arg1, dtor, f) {
     return real;
 }
 function __wbg_adapter_14(arg0, arg1, arg2) {
-    wasm.closure26_externref_shim(arg0, arg1, arg2);
+    wasm.closure45_externref_shim(arg0, arg1, arg2);
 }
 
 let cachegetInt32Memory0 = null;
@@ -66,13 +66,6 @@ const u32CvtShim = new Uint32Array(2);
 const uint64CvtShim = new BigUint64Array(u32CvtShim.buffer);
 
 let WASM_VECTOR_LEN = 0;
-
-function passArray8ToWasm0(arg, malloc) {
-    const ptr = malloc(arg.length * 1);
-    getUint8Memory0().set(arg, ptr / 1);
-    WASM_VECTOR_LEN = arg.length;
-    return ptr;
-}
 
 let cachedTextEncoder = new TextEncoder('utf-8');
 
@@ -126,18 +119,33 @@ function passStringToWasm0(arg, malloc, realloc) {
     WASM_VECTOR_LEN = offset;
     return ptr;
 }
+
+function passArray8ToWasm0(arg, malloc) {
+    const ptr = malloc(arg.length * 1);
+    getUint8Memory0().set(arg, ptr / 1);
+    WASM_VECTOR_LEN = arg.length;
+    return ptr;
+}
+
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
 /**
 * Takes a template vector to be hashed and a target difficulty u256 in hex string form and will mine until it finds a hash that matches the desired difficulty
 * @param {Uint8Array} template
 * @param {string} target_hex
+* @param {BigInt | undefined} offset
 * @returns {Promise<ProofOfWork>}
 */
-export function mine(template, target_hex) {
+export function mine(template, target_hex, offset) {
     var ptr0 = passArray8ToWasm0(template, wasm.__wbindgen_malloc);
     var len0 = WASM_VECTOR_LEN;
     var ptr1 = passStringToWasm0(target_hex, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     var len1 = WASM_VECTOR_LEN;
-    var ret = wasm.mine(ptr0, len0, ptr1, len1);
+    uint64CvtShim[0] = isLikeNone(offset) ? BigInt(0) : offset;
+    const low2 = u32CvtShim[0];
+    const high2 = u32CvtShim[1];
+    var ret = wasm.mine(ptr0, len0, ptr1, len1, !isLikeNone(offset), low2, high2);
     return ret;
 }
 
@@ -174,8 +182,8 @@ function handleError(f, args) {
         wasm.__wbindgen_exn_store(idx);
     }
 }
-function __wbg_adapter_25(arg0, arg1, arg2, arg3) {
-    wasm.closure45_externref_shim(arg0, arg1, arg2, arg3);
+function __wbg_adapter_26(arg0, arg1, arg2, arg3) {
+    wasm.closure65_externref_shim(arg0, arg1, arg2, arg3);
 }
 
 /**
@@ -269,6 +277,16 @@ export class ProofOfWork {
             wasm.__wbindgen_free(r0, r1);
         }
     }
+    /**
+    * @param {string} json_string
+    * @returns {ProofOfWork}
+    */
+    static from_json(json_string) {
+        var ptr0 = passStringToWasm0(json_string, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        var len0 = WASM_VECTOR_LEN;
+        var ret = wasm.proofofwork_from_json(ptr0, len0);
+        return ProofOfWork.__wrap(ret);
+    }
 }
 
 async function load(module, imports) {
@@ -336,7 +354,7 @@ async function init(input) {
                 const a = state0.a;
                 state0.a = 0;
                 try {
-                    return __wbg_adapter_25(a, state0.b, arg0, arg1);
+                    return __wbg_adapter_26(a, state0.b, arg0, arg1);
                 } finally {
                     state0.a = a;
                 }
@@ -379,8 +397,8 @@ async function init(input) {
     imports.wbg.__wbindgen_rethrow = function(arg0) {
         throw arg0;
     };
-    imports.wbg.__wbindgen_closure_wrapper69 = function(arg0, arg1, arg2) {
-        var ret = makeMutClosure(arg0, arg1, 27, __wbg_adapter_14);
+    imports.wbg.__wbindgen_closure_wrapper112 = function(arg0, arg1, arg2) {
+        var ret = makeMutClosure(arg0, arg1, 46, __wbg_adapter_14);
         return ret;
     };
     imports.wbg.__wbindgen_init_externref_table = function() {

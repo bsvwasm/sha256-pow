@@ -20,10 +20,10 @@ test-node:
 publish-node:
 	# make sure not to call make build-* because wasm-pack doesnt allow you to specify subdirectories.
 	wasm-pack build --release --target nodejs
-	sed -i'' -e "s/sha256_pow/sha256-pow/" ./pkg/package.json
+	gsed -i "0,/sha256_pow/s//sha256-pow/" ./pkg/package.json
 	wasm-pack publish ./pkg
 
 publish-bundler:
 	wasm-pack build --release --target bundler
-	sed -i'' -e "s/sha256_pow/sha256-pow-bundler/" ./pkg/package.json
+	gsed -i "0,/sha256_pow/s//sha256-pow-bundler/" ./pkg/package.json
 	wasm-pack publish ./pkg
