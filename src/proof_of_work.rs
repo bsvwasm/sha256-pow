@@ -24,6 +24,14 @@ impl ProofOfWork {
         self.template.clone()
     }
 
+    pub fn get_hash_hex(&self) -> String {
+        hex::encode(&self.hash)
+    }
+
+    pub fn get_template_hex(&self) -> String {
+        hex::encode(&self.template)
+    }
+
     pub fn get_nonce(&self) -> u64 {
         self.nonce
     }

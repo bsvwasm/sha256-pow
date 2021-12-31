@@ -22,6 +22,12 @@ export function mine_random(template: Uint8Array, target_hex: string): Promise<P
 */
 export function verify(pow: ProofOfWork, target_hex: string): boolean;
 /**
+* @param {Uint8Array} a
+* @param {Uint8Array} b
+* @returns {Uint8Array}
+*/
+export function xor(a: Uint8Array, b: Uint8Array): Uint8Array;
+/**
 */
 export enum POWErrors {
   InvalidTarget,
@@ -39,6 +45,14 @@ export class ProofOfWork {
 * @returns {Uint8Array}
 */
   get_template(): Uint8Array;
+/**
+* @returns {string}
+*/
+  get_hash_hex(): string;
+/**
+* @returns {string}
+*/
+  get_template_hex(): string;
 /**
 * @returns {BigInt}
 */
@@ -61,22 +75,25 @@ export interface InitOutput {
   readonly __wbg_proofofwork_free: (a: number) => void;
   readonly proofofwork_get_hash: (a: number, b: number) => void;
   readonly proofofwork_get_template: (a: number, b: number) => void;
+  readonly proofofwork_get_hash_hex: (a: number, b: number) => void;
+  readonly proofofwork_get_template_hex: (a: number, b: number) => void;
   readonly proofofwork_get_nonce: (a: number, b: number) => void;
   readonly proofofwork_to_json: (a: number, b: number) => void;
   readonly proofofwork_from_json: (a: number, b: number) => number;
   readonly mine: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => number;
   readonly mine_random: (a: number, b: number, c: number, d: number) => number;
   readonly verify: (a: number, b: number, c: number) => number;
+  readonly xor: (a: number, b: number, c: number, d: number, e: number) => void;
   readonly __wbindgen_export_0: WebAssembly.Table;
   readonly __wbindgen_export_1: WebAssembly.Table;
-  readonly closure49_externref_shim: (a: number, b: number, c: number) => void;
+  readonly closure50_externref_shim: (a: number, b: number, c: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_free: (a: number, b: number) => void;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
   readonly __wbindgen_exn_store: (a: number) => void;
   readonly __externref_table_alloc: () => number;
-  readonly closure88_externref_shim: (a: number, b: number, c: number, d: number) => void;
+  readonly closure89_externref_shim: (a: number, b: number, c: number, d: number) => void;
   readonly __wbindgen_start: () => void;
 }
 
