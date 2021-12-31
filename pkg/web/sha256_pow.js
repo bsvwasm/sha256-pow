@@ -17,54 +17,6 @@ function getStringFromWasm0(ptr, len) {
     return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
 }
 
-const CLOSURE_DTORS = new FinalizationRegistry(state => {
-    wasm.__wbindgen_export_1.get(state.dtor)(state.a, state.b)
-});
-
-function makeMutClosure(arg0, arg1, dtor, f) {
-    const state = { a: arg0, b: arg1, cnt: 1, dtor };
-    const real = (...args) => {
-        // First up with a closure we increment the internal reference
-        // count. This ensures that the Rust closure environment won't
-        // be deallocated while we're invoking it.
-        state.cnt++;
-        const a = state.a;
-        state.a = 0;
-        try {
-            return f(a, state.b, ...args);
-        } finally {
-            if (--state.cnt === 0) {
-                wasm.__wbindgen_export_1.get(state.dtor)(a, state.b);
-                CLOSURE_DTORS.unregister(state)
-            } else {
-                state.a = a;
-            }
-        }
-    };
-    real.original = state;
-    CLOSURE_DTORS.register(real, state, state);
-    return real;
-}
-function __wbg_adapter_24(arg0, arg1, arg2) {
-    wasm.closure50_externref_shim(arg0, arg1, arg2);
-}
-
-let cachegetInt32Memory0 = null;
-function getInt32Memory0() {
-    if (cachegetInt32Memory0 === null || cachegetInt32Memory0.buffer !== wasm.memory.buffer) {
-        cachegetInt32Memory0 = new Int32Array(wasm.memory.buffer);
-    }
-    return cachegetInt32Memory0;
-}
-
-function getArrayU8FromWasm0(ptr, len) {
-    return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
-}
-
-const u32CvtShim = new Uint32Array(2);
-
-const uint64CvtShim = new BigUint64Array(u32CvtShim.buffer);
-
 let WASM_VECTOR_LEN = 0;
 
 let cachedTextEncoder = new TextEncoder('utf-8');
@@ -119,6 +71,54 @@ function passStringToWasm0(arg, malloc, realloc) {
     WASM_VECTOR_LEN = offset;
     return ptr;
 }
+
+let cachegetInt32Memory0 = null;
+function getInt32Memory0() {
+    if (cachegetInt32Memory0 === null || cachegetInt32Memory0.buffer !== wasm.memory.buffer) {
+        cachegetInt32Memory0 = new Int32Array(wasm.memory.buffer);
+    }
+    return cachegetInt32Memory0;
+}
+
+const CLOSURE_DTORS = new FinalizationRegistry(state => {
+    wasm.__wbindgen_export_3.get(state.dtor)(state.a, state.b)
+});
+
+function makeMutClosure(arg0, arg1, dtor, f) {
+    const state = { a: arg0, b: arg1, cnt: 1, dtor };
+    const real = (...args) => {
+        // First up with a closure we increment the internal reference
+        // count. This ensures that the Rust closure environment won't
+        // be deallocated while we're invoking it.
+        state.cnt++;
+        const a = state.a;
+        state.a = 0;
+        try {
+            return f(a, state.b, ...args);
+        } finally {
+            if (--state.cnt === 0) {
+                wasm.__wbindgen_export_3.get(state.dtor)(a, state.b);
+                CLOSURE_DTORS.unregister(state)
+            } else {
+                state.a = a;
+            }
+        }
+    };
+    real.original = state;
+    CLOSURE_DTORS.register(real, state, state);
+    return real;
+}
+function __wbg_adapter_28(arg0, arg1, arg2) {
+    wasm.closure53_externref_shim(arg0, arg1, arg2);
+}
+
+function getArrayU8FromWasm0(ptr, len) {
+    return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
+}
+
+const u32CvtShim = new Uint32Array(2);
+
+const uint64CvtShim = new BigUint64Array(u32CvtShim.buffer);
 
 function passArray8ToWasm0(arg, malloc) {
     const ptr = malloc(arg.length * 1);
@@ -208,7 +208,7 @@ export function xor(a, b) {
 
 function addToExternrefTable0(obj) {
     const idx = wasm.__externref_table_alloc();
-    wasm.__wbindgen_export_0.set(idx, obj);
+    wasm.__wbindgen_export_2.set(idx, obj);
     return idx;
 }
 
@@ -220,8 +220,8 @@ function handleError(f, args) {
         wasm.__wbindgen_exn_store(idx);
     }
 }
-function __wbg_adapter_60(arg0, arg1, arg2, arg3) {
-    wasm.closure89_externref_shim(arg0, arg1, arg2, arg3);
+function __wbg_adapter_64(arg0, arg1, arg2, arg3) {
+    wasm.closure92_externref_shim(arg0, arg1, arg2, arg3);
 }
 
 /**
@@ -331,28 +331,18 @@ export class ProofOfWork {
         }
     }
     /**
-    * @returns {string}
+    * @returns {any}
     */
     to_json() {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.proofofwork_to_json(retptr, this.ptr);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            return getStringFromWasm0(r0, r1);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-            wasm.__wbindgen_free(r0, r1);
-        }
+        var ret = wasm.proofofwork_to_json(this.ptr);
+        return ret;
     }
     /**
-    * @param {string} json_string
+    * @param {any} json_obj
     * @returns {ProofOfWork}
     */
-    static from_json(json_string) {
-        var ptr0 = passStringToWasm0(json_string, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        var len0 = WASM_VECTOR_LEN;
-        var ret = wasm.proofofwork_from_json(ptr0, len0);
+    static from_json(json_obj) {
+        var ret = wasm.proofofwork_from_json(json_obj);
         return ProofOfWork.__wrap(ret);
     }
 }
@@ -402,6 +392,18 @@ async function init(input) {
         var ret = getStringFromWasm0(arg0, arg1);
         return ret;
     };
+    imports.wbg.__wbindgen_json_serialize = function(arg0, arg1) {
+        const obj = arg1;
+        var ret = JSON.stringify(obj === undefined ? null : obj);
+        var ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        var len0 = WASM_VECTOR_LEN;
+        getInt32Memory0()[arg0 / 4 + 1] = len0;
+        getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+    };
+    imports.wbg.__wbindgen_json_parse = function(arg0, arg1) {
+        var ret = JSON.parse(getStringFromWasm0(arg0, arg1));
+        return ret;
+    };
     imports.wbg.__wbindgen_cb_drop = function(arg0) {
         const obj = arg0.original;
         if (obj.cnt-- == 1) {
@@ -411,11 +413,11 @@ async function init(input) {
         var ret = false;
         return ret;
     };
-    imports.wbg.__wbg_randomFillSync_64cc7d048f228ca8 = function() { return handleError(function (arg0, arg1, arg2) {
-        arg0.randomFillSync(getArrayU8FromWasm0(arg1, arg2));
-    }, arguments) };
     imports.wbg.__wbg_getRandomValues_98117e9a7e993920 = function() { return handleError(function (arg0, arg1) {
         arg0.getRandomValues(arg1);
+    }, arguments) };
+    imports.wbg.__wbg_randomFillSync_64cc7d048f228ca8 = function() { return handleError(function (arg0, arg1, arg2) {
+        arg0.randomFillSync(getArrayU8FromWasm0(arg1, arg2));
     }, arguments) };
     imports.wbg.__wbg_process_2f24d6544ea7b200 = function(arg0) {
         var ret = arg0.process;
@@ -469,7 +471,7 @@ async function init(input) {
                 const a = state0.a;
                 state0.a = 0;
                 try {
-                    return __wbg_adapter_60(a, state0.b, arg0, arg1);
+                    return __wbg_adapter_64(a, state0.b, arg0, arg1);
                 } finally {
                     state0.a = a;
                 }
@@ -559,12 +561,12 @@ async function init(input) {
         var ret = wasm.memory;
         return ret;
     };
-    imports.wbg.__wbindgen_closure_wrapper153 = function(arg0, arg1, arg2) {
-        var ret = makeMutClosure(arg0, arg1, 51, __wbg_adapter_24);
+    imports.wbg.__wbindgen_closure_wrapper159 = function(arg0, arg1, arg2) {
+        var ret = makeMutClosure(arg0, arg1, 54, __wbg_adapter_28);
         return ret;
     };
     imports.wbg.__wbindgen_init_externref_table = function() {
-        const table = wasm.__wbindgen_export_0;
+        const table = wasm.__wbindgen_export_2;
         const offset = table.grow(4);
         table.set(0, undefined);
         table.set(offset + 0, undefined);

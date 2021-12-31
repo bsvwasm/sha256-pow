@@ -1,16 +1,19 @@
 use primitive_types::U256;
 use rand::Rng;
 use serde::*;
+use serde_with::{serde_as, DisplayFromStr};
 use sha2::Digest;
 use wasm_bindgen::prelude::*;
-
 #[wasm_bindgen]
+#[serde_as]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ProofOfWork {
     #[serde(with = "hex")]
     hash: Vec<u8>,
     #[serde(with = "hex")]
     template: Vec<u8>,
+
+    #[serde_as(as = "DisplayFromStr")]  
     nonce: u64
 }
 
@@ -36,15 +39,15 @@ impl ProofOfWork {
         self.nonce
     }
 
-    pub fn to_json(&self) -> Result<String, JsValue> {
-        match serde_json::to_string(self) {
+    pub fn to_json(&self) -> Result<JsValue, JsValue> {
+        match JsValue::from_serde(self) {
             Ok(v) => Ok(v),
             Err(e) => Err(JsValue::from_str(&format!("{:#?}", e))),
         }
     }
 
-    pub fn from_json(json_string: &str) -> Result<ProofOfWork, JsValue> {
-        match serde_json::from_str(json_string) {
+    pub fn from_json(json_obj: JsValue) -> Result<ProofOfWork, JsValue> {
+        match json_obj.into_serde() {
             Ok(v) => Ok(v),
             Err(e) => Err(JsValue::from_str(&format!("{:#?}", e))),
         }
