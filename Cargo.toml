@@ -1,6 +1,6 @@
 [package]
 name = "sha256_pow"
-version = "0.1.8"
+version = "0.1.9"
 edition = "2018"
 
 [lib]
@@ -24,6 +24,9 @@ features = ["js"]
 
 [dev-dependencies]
 wasm-bindgen-test = "^0.3"
+
+[patch.crates-io]
+wasm-bindgen = { git = "https://github.com/bsvwasm/wasm-bindgen", branch = "universal-ui64-patch" }
 
 [build]
 rustflags = ["-C", "target-feature=+simd128"]

@@ -1,3 +1,7 @@
+install-tools:
+	cargo install wasm-bindgen-cli --git https://github.com/bsvwasm/wasm-bindgen --branch universal-ui64-patch
+
+
 check-format:
 	cargo fmt -- --check && cargo clippy -- -Dwarnings
 

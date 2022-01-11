@@ -118,8 +118,6 @@ function getArrayU8FromWasm0(ptr, len) {
 
 const u32CvtShim = new Uint32Array(2);
 
-const uint64CvtShim = new BigUint64Array(u32CvtShim.buffer);
-
 function passArray8ToWasm0(arg, malloc) {
     const ptr = malloc(arg.length * 1);
     getUint8Memory0().set(arg, ptr / 1);
@@ -142,7 +140,9 @@ export function mine(template, target_hex, offset) {
     var len0 = WASM_VECTOR_LEN;
     var ptr1 = passStringToWasm0(target_hex, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     var len1 = WASM_VECTOR_LEN;
-    uint64CvtShim[0] = isLikeNone(offset) ? BigInt(0) : offset;
+    // Instruction::I32SplitOption64
+    u32CvtShim[0] = isLikeNone(offset) ? 0 : Number(offset & 0xffffffffn);
+    u32CvtShim[1] = isLikeNone(offset) ? 0 : Number(offset >> 32n);
     const low2 = u32CvtShim[0];
     const high2 = u32CvtShim[1];
     var ret = wasm.mine(ptr0, len0, ptr1, len1, !isLikeNone(offset), low2, high2);
@@ -322,9 +322,10 @@ export class ProofOfWork {
             wasm.proofofwork_get_nonce(retptr, this.ptr);
             var r0 = getInt32Memory0()[retptr / 4 + 0];
             var r1 = getInt32Memory0()[retptr / 4 + 1];
+            // Instruction::I64FromLoHi
             u32CvtShim[0] = r0;
             u32CvtShim[1] = r1;
-            const n0 = uint64CvtShim[0];
+            const n0 = (BigInt(u32CvtShim[1]) << 32n) | BigInt(u32CvtShim[0]);
             return n0;
         } finally {
             wasm.__wbindgen_add_to_stack_pointer(16);
@@ -413,11 +414,11 @@ async function init(input) {
         var ret = false;
         return ret;
     };
-    imports.wbg.__wbg_getRandomValues_98117e9a7e993920 = function() { return handleError(function (arg0, arg1) {
-        arg0.getRandomValues(arg1);
-    }, arguments) };
     imports.wbg.__wbg_randomFillSync_64cc7d048f228ca8 = function() { return handleError(function (arg0, arg1, arg2) {
         arg0.randomFillSync(getArrayU8FromWasm0(arg1, arg2));
+    }, arguments) };
+    imports.wbg.__wbg_getRandomValues_98117e9a7e993920 = function() { return handleError(function (arg0, arg1) {
+        arg0.getRandomValues(arg1);
     }, arguments) };
     imports.wbg.__wbg_process_2f24d6544ea7b200 = function(arg0) {
         var ret = arg0.process;
